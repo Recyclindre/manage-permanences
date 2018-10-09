@@ -2,4 +2,8 @@
 
 Appliation pour gérer les permences du composteur Recyclindre. 
 
-Accessible ( bientôt ) sur le domaine : recyclindre.fr
+Accessible sur le domaine : http://recyclindre.fr
+
+## Stack technique
+
+L'application est développé avec [API Platform](https://api-platform.com/) et un front en [React](https://reactjs.org/)
