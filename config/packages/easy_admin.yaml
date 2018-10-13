@@ -1,5 +1,14 @@
 easy_admin:
+    site_name: 'Recyclindre'
     entities:
         # List the entity class name you want to manage
-        - App\Entity\Opener
-        - App\Entity\Permanence
+        Permanence:
+            class: App\Entity\Permanence
+        User:
+            class: App\Entity\User
+            controller: App\Controller\UserController
+            form:
+                fields:
+                    - username
+                    - { property: 'password', type: 'password', label: 'Mot de passe' }
+                    - { property: 'email', type: 'email', label: 'Email' }

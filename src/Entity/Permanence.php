@@ -39,9 +39,9 @@ class Permanence
     public $date;
 
     /**
-     * @var Opener[] People who will open the composter
+     * @var User[] People who will open the composter
      *
-     * @ORM\ManyToMany(targetEntity="Opener", mappedBy="permanences")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="permanences")
      */
     public $openers;
 
