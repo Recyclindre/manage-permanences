@@ -12,12 +12,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\User;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * A Permanence
  *
  * @ORM\Entity
- * @ApiResource
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"},
+ *     normalizationContext={"groups"={"permanence"}}
+ * )
  */
 class Permanence
 {
@@ -35,6 +42,7 @@ class Permanence
      * @var \DateTime Permanence date
      *
      * @ORM\Column(type="datetime")
+     * @Groups({"permanence"})
      */
     public $date;
 
@@ -42,6 +50,7 @@ class Permanence
      * @var User[] People who will open the composter
      *
      * @ORM\ManyToMany(targetEntity="User", mappedBy="permanences")
+     * @Groups({"permanence"})
      */
     public $openers;
 
@@ -71,14 +80,14 @@ class Permanence
     }
 
     /**
-     * @return Collection|Opener[]
+     * @return Collection|User[]
      */
     public function getOpeners(): Collection
     {
         return $this->openers;
     }
 
-    public function addOpener(Opener $opener): self
+    public function addOpener(User $opener): self
     {
         if (!$this->openers->contains($opener)) {
             $this->openers[] = $opener;
@@ -88,7 +97,7 @@ class Permanence
         return $this;
     }
 
-    public function removeOpener(Opener $opener): self
+    public function removeOpener(User $opener): self
     {
         if ($this->openers->contains($opener)) {
             $this->openers->removeElement($opener);

@@ -4,166 +4,59 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use FOS\UserBundle\Model\User as BaseUser;
+use FOS\UserBundle\Model\UserInterface;
+use App\Entity\Permanence;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Table(name="app_users")
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity
+ * @ORM\Table(name="fos_user")
  * @ApiResource(
- *     normalizationContext={"groups"={"read"}},
  *     collectionOperations={"get"},
- *     itemOperations={"get"}
+ *     itemOperations={"get"},
+ *     normalizationContext={"groups"={"user", "user:read"}},
+ *     denormalizationContext={"groups"={"user", "user:write"}}
  * )
  */
-class User implements UserInterface, \Serializable
+class User extends BaseUser
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups("read")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
-     * @Groups("read")
+     * @Groups({"user","permanence"})
      */
-    private $username;
+    protected $email;
 
     /**
-     * @ORM\Column(type="string", length=64)
-     * @Groups("read")
+     * @Groups({"user:write"})
      */
-    private $password;
+    protected $plainPassword;
 
     /**
-     * @ORM\Column(type="string", length=254, unique=true)
-     * @Groups("read")
+     * @Groups({"user","permanence"})
      */
-    private $email;
+    protected $username;
 
-    /**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive;
 
     /**
      * @var Permanence[] People who will open the composter
      *
      * @ORM\ManyToMany(targetEntity="Permanence", inversedBy="openers")
-     * @Groups("read")
      */
     public $permanences;
 
 
     public function __construct()
     {
+        parent::__construct();
         $this->permanences = new ArrayCollection();
-        $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
-    }
-
-    public function __toString()
-    {
-        return $this->getUsername();
-    }
-
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    public function getSalt()
-    {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
-        return null;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
-
-    public function eraseCredentials()
-    {
-    }
-
-    /** @see \Serializable::serialize() */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ));
-    }
-
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
-    {
-        list (
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt
-            ) = unserialize($serialized, array('allowed_classes' => false));
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function setPassword(string $password ): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getIsActive(): ?bool
-    {
-        return $this->isActive;
-    }
-
-    public function setIsActive(bool $isActive): self
-    {
-        $this->isActive = $isActive;
-
-        return $this;
     }
 
     /**
@@ -190,5 +83,10 @@ class User implements UserInterface, \Serializable
         }
 
         return $this;
+    }
+
+    public function isUser(?UserInterface $user = null): bool
+    {
+        return $user instanceof self && $user->id === $this->id;
     }
 }

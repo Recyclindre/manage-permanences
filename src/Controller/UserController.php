@@ -16,30 +16,22 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends BaseAdminController
 {
-    private $encoder;
-
-    public function __construct( UserPasswordEncoderInterface $encoder )
+    public function createNewUserEntity()
     {
-
-        $this->encoder = $encoder;
+        return $this->get('fos_user.user_manager')->createUser();
     }
 
-    public function persistUserEntity( User $user )
-    {
 
-        $encoded = $this->encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($encoded);
+    public function persistUserEntity($user)
+    {
+        $this->get('fos_user.user_manager')->updateUser($user, false);
         parent::persistEntity($user);
     }
 
-
-    public function updateUserEntity( User $user )
+    public function updateUserEntity($user)
     {
-
-        $encoded = $this->encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($encoded);
-
-        parent::updateEntity( $user );
+        $this->get('fos_user.user_manager')->updateUser($user, false);
+        parent::updateEntity($user);
     }
 
 }

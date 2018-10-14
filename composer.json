@@ -7,12 +7,16 @@
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.1",
         "easycorp/easyadmin-bundle": "^1.17",
+        "friendsofsymfony/user-bundle": "^2.1",
         "symfony/console": "*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "*",
         "symfony/maker-bundle": "^1.7",
         "symfony/orm-pack": "^1.0",
         "symfony/security-bundle": "*",
+        "symfony/swiftmailer-bundle": "^3.2",
+        "symfony/twig-bundle": "*",
+        "symfony/webpack-encore-pack": "^1.0",
         "symfony/yaml": "*"
     },
     "require-dev": {

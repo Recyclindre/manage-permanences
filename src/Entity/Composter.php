@@ -9,7 +9,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * A book.
  *
  * @ORM\Entity
- * @ApiResource
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  */
 class Composter
 {
