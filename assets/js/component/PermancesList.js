@@ -54,14 +54,16 @@ class PermancesList extends React.Component {
                                         <ListItem key={per['@id']} dense>
                                             <ListItemText primary={ new Date( per.date ).toLocaleString( 'fr-FR', toLocaleStringOptions ) } />
                                             {
-                                                per.openers && per.openers.map( user => (
+                                                per.openers.length > 0 ?
+                                                    per.openers.map( user => (
 
                                                     <Fragment key={user['@id']}>
                                                         <Avatar component={Gravatar} email={user.email} />
                                                         <ListItemText primary={user.username} />
                                                     </Fragment>
 
-                                                ))
+                                                    )) :
+                                                    <ListItemText primary="Personne encore" />
                                             }
                                         </ListItem>
                                     ))
