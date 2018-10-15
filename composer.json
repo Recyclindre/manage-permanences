@@ -9,6 +9,7 @@
         "easycorp/easyadmin-bundle": "^1.17",
         "friendsofsymfony/user-bundle": "^2.1",
         "symfony/console": "*",
+        "symfony/dotenv": "*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "*",
         "symfony/maker-bundle": "^1.7",
@@ -20,7 +21,6 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
-        "symfony/dotenv": "*"
     },
     "config": {
         "preferred-install": {
