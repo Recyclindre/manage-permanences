@@ -19,7 +19,6 @@ class PermancesList extends React.Component {
         fetch('/api/permanences')
             .then(response => response.json())
             .then(entries => {
-                console.log( entries )
                 this.setState({
                     permanences: entries['hydra:member']
                 });
@@ -29,28 +28,48 @@ class PermancesList extends React.Component {
     render() {
         const { permanences } = this.state
 
+        const toLocaleStringOptions = {weekday: "long", day: "numeric", hour: "2-digit", minute: "2-digit"};
+
+        let permanencesByMonth = []
+        permanences.forEach( ( per ) => {
+
+            const perDate = new Date( per.date )
+            if( typeof permanencesByMonth[ perDate.getMonth() ] === 'undefined' ){
+                permanencesByMonth[ perDate.getMonth() ] = {}
+                permanencesByMonth[ perDate.getMonth() ].month = perDate
+                permanencesByMonth[ perDate.getMonth() ].perm = []
+            }
+            permanencesByMonth[ perDate.getMonth() ].perm.push( per )
+        })
+
         return (
             <Fragment>
-                <Typography component="h2" variant="h2" >Octobre 2018</Typography>
-                <List>
-                    {
-                        permanences.map(  per => (
-                            <ListItem key={per['@id']} dense>
-                                <ListItemText primary={ new Date( per.date ).toLocaleString() } />
+                {
+                    permanencesByMonth && permanencesByMonth.map( ( monthObjc ) => (
+                        <Fragment key={monthObjc.month.toLocaleString()}>
+                            <Typography component="h2" variant="h2" >{ monthObjc.month.toLocaleString( 'fr-FR', { month: "long", year: "numeric"}) }</Typography>
+                            <List>
                                 {
-                                    per.openers && per.openers.map( user => (
+                                    monthObjc.perm.map(  per => (
+                                        <ListItem key={per['@id']} dense>
+                                            <ListItemText primary={ new Date( per.date ).toLocaleString( 'fr-FR', toLocaleStringOptions ) } />
+                                            {
+                                                per.openers && per.openers.map( user => (
 
-                                        <Fragment key={user['@id']}>
-                                            <Avatar component={Gravatar} email={user.email} />
-                                            <ListItemText primary={user.username} />
-                                        </Fragment>
+                                                    <Fragment key={user['@id']}>
+                                                        <Avatar component={Gravatar} email={user.email} />
+                                                        <ListItemText primary={user.username} />
+                                                    </Fragment>
 
+                                                ))
+                                            }
+                                        </ListItem>
                                     ))
                                 }
-                            </ListItem>
-                        ))
-                    }
-                </List>
+                            </List>
+                        </Fragment>
+                    ))
+                }
             </Fragment>
         )
     }
