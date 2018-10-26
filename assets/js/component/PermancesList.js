@@ -16,7 +16,7 @@ class PermancesList extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/permanences')
+        fetch('/api/permanences?order[date]=ASC')
             .then(response => response.json())
             .then(entries => {
                 this.setState({
