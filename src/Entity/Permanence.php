@@ -52,6 +52,14 @@ class Permanence
     public $date;
 
     /**
+     * @var \Boolean Permanence is canceled
+     *
+     * @ORM\Column(type="boolean")
+     * @Groups({"permanence"})
+     */
+    public $canceled;
+
+    /**
      * @var User[] People who will open the composter
      *
      * @ORM\ManyToMany(targetEntity="User", mappedBy="permanences")

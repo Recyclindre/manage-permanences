@@ -12,6 +12,7 @@ easy_admin:
                 fields:
                     - { property: 'openers', type_options: { by_reference: false} }
                     - { property: 'date', type: 'datetime' }
+                    - { property: 'canceled' }
         User:
             class: App\Entity\User
             controller: App\Controller\UserController

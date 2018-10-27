@@ -20,23 +20,28 @@ class Permance extends React.Component {
                                 {new Date(per.date).toLocaleString('fr-FR', toLocaleStringOptions)}
                             </Typography>
                             {
-                                per.openers.length > 0 ?
-                                    per.openers.map(user => (
-
-                                        <Chip
-                                            key={user['@id']}
-                                            avatar={<Avatar component={Gravatar} email={user.email}/>}
-                                            label={user.username}
-                                            color="primary"
-                                            //onDelete={}
-                                        />
-
-                                    )) :
+                                per.canceled ?
                                     <Chip
-                                        label="Personne encore"
-                                        color="secondary"
-                                        //onClick={handleClick}
+                                        label="Annulé"
                                     />
+                                    :
+                                    per.openers.length > 0 ?
+                                        per.openers.map(user => (
+
+                                            <Chip
+                                                key={user['@id']}
+                                                avatar={<Avatar component={Gravatar} email={user.email}/>}
+                                                label={user.username}
+                                                color="primary"
+                                                //onDelete={}
+                                            />
+
+                                        )) :
+                                        <Chip
+                                            label="Personne encore"
+                                            color="secondary"
+                                            //onClick={handleClick}
+                                        />
                             }
                         </CardContent>
                     </Card>
