@@ -1,8 +1,9 @@
 import React, {Fragment} from "react"
 import Typography from '@material-ui/core/Typography';
-import {Grid } from "@material-ui/core"
+import {Grid, CircularProgress } from "@material-ui/core"
 import Permanence from "./Permanence"
-
+import {AppContext} from "../app-context"
+import { superagent, apiRoot, handelError } from '../utils/superagentWrapper'
 
 
 class PermancesList extends React.Component {
@@ -11,22 +12,33 @@ class PermancesList extends React.Component {
         super();
 
         this.state = {
-            permanences: []
+            permanences: [],
+            loading: true
         };
     }
 
     componentDidMount() {
-        fetch('/api/permanences?order[date]=ASC')
-            .then(response => response.json())
-            .then(entries => {
-                this.setState({
-                    permanences: entries['hydra:member']
-                });
-            });
+
+        this.getPermanences( this.context.selectedComposter.id )
     }
 
+    getPermanences( composterId ){
+        superagent
+            .get(`${apiRoot}/permanences?order[date]=ASC&composter=${composterId}`)
+            .then( ( response ) => {
+                const body = handelError( response )
+                if( body ){
+                    this.setState({
+                        permanences: body['hydra:member'],
+                        loading: false
+                    })
+                }
+            })
+    }
+
+
     render() {
-        const { permanences } = this.state
+        const { permanences, loading } = this.state
 
         let permanencesByMonth = []
         permanences.forEach( ( per ) => {
@@ -43,20 +55,28 @@ class PermancesList extends React.Component {
         return (
             <Fragment>
                 {
-                    permanencesByMonth && permanencesByMonth.map( ( monthObjc ) => (
-                        <Fragment key={monthObjc.month.toLocaleString()}>
-                            <Typography component="h2" variant="h5" gutterBottom style={{marginTop:"2em"}}>{ monthObjc.month.toLocaleString( 'fr-FR', { month: "long", year: "numeric"}) }</Typography>
+                    loading  ?
+                        <CircularProgress style={{marginTop:"2em"}}/>
+                        :
+                        permanencesByMonth.map( ( monthObjc ) => (
+                            <Fragment key={monthObjc.month.toLocaleString()}>
+
+                                <Typography component="h2" variant="h5" gutterBottom style={{marginTop:"2em"}}>
+                                    { monthObjc.month.toLocaleString( 'fr-FR', { month: "long", year: "numeric"}) }
+                                </Typography>
+
                                 <Grid container spacing={24} alignItems="stretch">
                                     {
                                         monthObjc.perm.map(  per => ( <Permanence per={per} key={per['@id']}/>))
                                     }
                                 </Grid>
-                        </Fragment>
-                    ))
+                            </Fragment>
+                        ))
                 }
             </Fragment>
         )
     }
 }
+PermancesList.contextType = AppContext;
 
 export default PermancesList

@@ -15,6 +15,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Entity\User;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -30,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ApiFilter(OrderFilter::class, properties={"date":"ASC"})
  * @ApiFilter(DateFilter::class, properties={"date"})
+ * @ApiFilter(SearchFilter::class, properties={"composter": "exact"})
  */
 class Permanence
 {
