@@ -2,6 +2,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
@@ -17,7 +18,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 class Composter
 {
     /**
-     * @var int The id of this book.
+     * @var int The id of the composter
      *
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -27,20 +28,55 @@ class Composter
 
 
     /**
-     * @var string The title of this book.
+     * @var string The name of the composter
      *
      * @ORM\Column
      */
     public $name;
 
     /**
-     * @var string The description of this book.
+     * @var string The description of the composter to be shown on the composter page
      *
      * @ORM\Column(type="text")
      */
     public $description;
 
+    /**
+     * @var string The address of the composter to be shown on the composter page
+     *
+     * @ORM\Column(type="text")
+     */
+    public $address;
 
+    /**
+     * @var float The latitude of the composter
+     *
+     * @ORM\Column(type="float")
+     */
+    public $lat;
+
+    /**
+     * @var float The longitude of the composter
+     *
+     * @ORM\Column(type="float")
+     */
+    public $lng;
+
+    /**
+     * @var Permanence[] permancence of the composter
+     *
+     * @ORM\OneToMany(targetEntity="Permanence", mappedBy="composter")
+     */
+    public $permanences;
+
+    public function __construct()
+    {
+        $this->permanences = new ArrayCollection();
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
 
     public function getId(): ?int
     {
@@ -67,6 +103,73 @@ class Composter
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(float $lat): self
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLng(): ?float
+    {
+        return $this->lng;
+    }
+
+    public function setLng(float $lng): self
+    {
+        $this->lng = $lng;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Permanence[]
+     */
+    public function getPermanences(): Collection
+    {
+        return $this->permanences;
+    }
+
+    public function addPermanence(Permanence $permanence): self
+    {
+        if (!$this->permanences->contains($permanence)) {
+            $this->permanences[] = $permanence;
+            $permanence->setComposter($this);
+        }
+
+        return $this;
+    }
+
+    public function removePermanence(Permanence $permanence): self
+    {
+        if ($this->permanences->contains($permanence)) {
+            $this->permanences->removeElement($permanence);
+            // set the owning side to null (unless already changed)
+            if ($permanence->getComposter() === $this) {
+                $permanence->setComposter(null);
+            }
+        }
 
         return $this;
     }

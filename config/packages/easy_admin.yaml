@@ -4,15 +4,27 @@ easy_admin:
         datetime: 'd/m/Y H:i'
     entities:
         # List the entity class name you want to manage
+        Composter:
+            class: App\Entity\Composter
+            form:
+                fields:
+                    - name
+                    - description
+                    - address
+                    - lat
+                    - lng
+                    - { property: 'permanences', type_options: { by_reference: false } }
         Permanence:
             class: App\Entity\Permanence
+            controller: App\Controller\PermanenceComtroller
             list:
                 sort: ['date', 'DESC']
             form:
                 fields:
-                    - { property: 'openers', type_options: { by_reference: false} }
                     - { property: 'date', type: 'datetime' }
-                    - { property: 'canceled' }
+                    - { property: 'openers', type_options: { by_reference: false} }
+                    - canceled
+                    - composter
         User:
             class: App\Entity\User
             controller: App\Controller\UserController

@@ -67,6 +67,13 @@ class Permanence
      */
     public $openers;
 
+    /**
+     * @var Composter of the permanence
+     *
+     * @ORM\ManyToOne(targetEntity="Composter", inversedBy="permanences")
+     */
+    public $composter;
+
     public function __construct() {
         $this->openers = new ArrayCollection();
     }
@@ -116,6 +123,30 @@ class Permanence
             $this->openers->removeElement($opener);
             $opener->removePermanence($this);
         }
+
+        return $this;
+    }
+
+    public function getCanceled(): ?bool
+    {
+        return $this->canceled;
+    }
+
+    public function setCanceled(bool $canceled): self
+    {
+        $this->canceled = $canceled;
+
+        return $this;
+    }
+
+    public function getComposter(): ?Composter
+    {
+        return $this->composter;
+    }
+
+    public function setComposter(?Composter $composter): self
+    {
+        $this->composter = $composter;
 
         return $this;
     }
