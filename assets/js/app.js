@@ -35,6 +35,13 @@ const theme = createMuiTheme({
                 marginTop: defaultTheme.spacing.unit,
                 marginRight: defaultTheme.spacing.unit,
             }
+        },
+        MuiPaper :{
+            root: {
+                border: `2px solid ${lightGreen['500']}`,
+                textAlign: "center",
+                height: "100%"
+            }
         }
     }
 });
