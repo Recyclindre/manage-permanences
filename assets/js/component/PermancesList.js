@@ -5,8 +5,7 @@ import Permanence from "./Permanence"
 import {AppContext} from "../app-context"
 import { superagent, apiRoot, handelError } from '../utils/superagentWrapper'
 import * as moment from 'moment'
-import Swipe from 'react-easy-swipe';
-
+import Swipeable from 'react-swipeable'
 
 class PermancesList extends React.Component {
 
@@ -88,9 +87,9 @@ class PermancesList extends React.Component {
                         permanencesByMonth.map( ( monthObjc ) => (
                             <Fragment key={monthObjc.month.toLocaleString()}>
 
-                                <Swipe
-                                    onSwipeLeft={ () => this.setCurrentMonth( nextMonth ) }
-                                    onSwipeRight={ () => this.setCurrentMonth( prevMonth ) }
+                                <Swipeable
+                                    onSwipedLeft={ () => this.setCurrentMonth( nextMonth ) }
+                                    onSwipedRight={ () => this.setCurrentMonth( prevMonth ) }
                                 >
                                     <Typography component="h2" variant="h5" gutterBottom style={{marginTop:"2em"}}>
                                         { monthObjc.month.toLocaleString( 'fr-FR', { month: "long", year: "numeric"}) }
@@ -101,7 +100,7 @@ class PermancesList extends React.Component {
                                             monthObjc.perm.map(  per => ( <Permanence per={per} key={per['@id']}/>))
                                         }
                                     </Grid>
-                                </Swipe>
+                                </Swipeable>
                                 <Grid container spacing={24} alignItems="stretch">
                                     <Grid item xs={6}>
                                         <Button variant="contained" onClick={ () => this.setCurrentMonth( prevMonth )}>
