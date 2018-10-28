@@ -1,9 +1,11 @@
 import React, {Fragment} from "react"
 import Typography from '@material-ui/core/Typography';
-import {Grid, CircularProgress } from "@material-ui/core"
+import {Grid, CircularProgress, Button } from "@material-ui/core"
 import Permanence from "./Permanence"
 import {AppContext} from "../app-context"
 import { superagent, apiRoot, handelError } from '../utils/superagentWrapper'
+import * as moment from 'moment'
+import Swipe from 'react-easy-swipe';
 
 
 class PermancesList extends React.Component {
@@ -11,20 +13,41 @@ class PermancesList extends React.Component {
     constructor() {
         super();
 
+        const today = moment().format('YYYY-MM')
+
         this.state = {
             permanences: [],
+            currentMonth: today,
             loading: true
         };
     }
 
-    componentDidMount() {
-
-        this.getPermanences( this.context.selectedComposter.id )
+    setCurrentMonth( currentMonth ){
+        this.setState( { currentMonth } )
     }
 
-    getPermanences( composterId ){
+    componentDidMount() {
+        this.getPermanences()
+    }
+
+    componentDidUpdate( prevProps, prevState ){
+
+        if( prevState.currentMonth !== this.state.currentMonth ){
+            this.setState({ loading: true } )
+            this.getPermanences()
+        }
+    }
+
+    getPermanences(){
+        const { selectedComposter } = this.context
+        const { currentMonth } = this.state
+
         superagent
-            .get(`${apiRoot}/permanences?order[date]=ASC&composter=${composterId}`)
+            .get(`${apiRoot}/permanences`)
+            .query( { "order[date]" : "ASC" } )
+            .query( { composter : selectedComposter.id } )
+            .query( {"date[after]" : `${currentMonth}-01`})
+            .query( {"date[before]" : `${currentMonth}-31`})
             .then( ( response ) => {
                 const body = handelError( response )
                 if( body ){
@@ -38,7 +61,11 @@ class PermancesList extends React.Component {
 
 
     render() {
-        const { permanences, loading } = this.state
+        const { permanences, loading, currentMonth, changeMonth } = this.state
+        const prevMonth = moment( `${currentMonth}-01`).subtract( 1, 'months' ).format('YYYY-MM')
+        const nextMonth = moment( `${currentMonth}-01`).add( 1, 'months' ).format('YYYY-MM')
+
+        console.log( currentMonth )
 
         let permanencesByMonth = []
         permanences.forEach( ( per ) => {
@@ -61,14 +88,31 @@ class PermancesList extends React.Component {
                         permanencesByMonth.map( ( monthObjc ) => (
                             <Fragment key={monthObjc.month.toLocaleString()}>
 
-                                <Typography component="h2" variant="h5" gutterBottom style={{marginTop:"2em"}}>
-                                    { monthObjc.month.toLocaleString( 'fr-FR', { month: "long", year: "numeric"}) }
-                                </Typography>
+                                <Swipe
+                                    onSwipeLeft={ () => this.setCurrentMonth( nextMonth ) }
+                                    onSwipeRight={ () => this.setCurrentMonth( prevMonth ) }
+                                >
+                                    <Typography component="h2" variant="h5" gutterBottom style={{marginTop:"2em"}}>
+                                        { monthObjc.month.toLocaleString( 'fr-FR', { month: "long", year: "numeric"}) }
+                                    </Typography>
 
+                                    <Grid container spacing={24} alignItems="stretch">
+                                        {
+                                            monthObjc.perm.map(  per => ( <Permanence per={per} key={per['@id']}/>))
+                                        }
+                                    </Grid>
+                                </Swipe>
                                 <Grid container spacing={24} alignItems="stretch">
-                                    {
-                                        monthObjc.perm.map(  per => ( <Permanence per={per} key={per['@id']}/>))
-                                    }
+                                    <Grid item xs={6}>
+                                        <Button variant="contained" onClick={ () => this.setCurrentMonth( prevMonth )}>
+                                            Prev
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={6} style={{textAlign: 'right'}}>
+                                        <Button variant="contained" onClick={ () => this.setCurrentMonth( nextMonth )}>
+                                            Next
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             </Fragment>
                         ))
