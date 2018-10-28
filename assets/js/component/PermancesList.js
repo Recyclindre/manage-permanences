@@ -1,11 +1,12 @@
 import React, {Fragment} from "react"
 import Typography from '@material-ui/core/Typography';
-import {Grid, CircularProgress, Button } from "@material-ui/core"
+import {Grid, LinearProgress, Button } from "@material-ui/core"
 import Permanence from "./Permanence"
 import {AppContext} from "../app-context"
 import { superagent, apiRoot, handelError } from '../utils/superagentWrapper'
 import * as moment from 'moment'
 import Swipeable from 'react-swipeable'
+import { find } from 'lodash'
 
 class PermancesList extends React.Component {
 
@@ -60,63 +61,70 @@ class PermancesList extends React.Component {
 
 
     render() {
-        const { permanences, loading, currentMonth, changeMonth } = this.state
+        const { permanences, loading, currentMonth } = this.state
+
+        moment.locale('fr')
+        const currentMonthNum = moment( currentMonth ).get('month')
         const prevMonth = moment( `${currentMonth}-01`).subtract( 1, 'months' ).format('YYYY-MM')
         const nextMonth = moment( `${currentMonth}-01`).add( 1, 'months' ).format('YYYY-MM')
 
-        console.log( currentMonth )
+        let currentDay = moment( `${currentMonth}-01`)
+        let permToDisplay = []
+        // TODO on doit récupérer de l'API dans l'objet composte normalement
+        const recurrentPerm = [
+            { day: 4, hour: 18, minute: 30},
+            { day: 6, hour: 11, minute: 30},
+        ]
 
-        let permanencesByMonth = []
-        permanences.forEach( ( per ) => {
+        // On passe en revut chaque date du mois
+        while( currentDay.get('month') === currentMonthNum ){
+            const permOfTheDay = find( permanences, function(o) { return currentDay.isSame( o.date, 'day' ); } )
 
-            const perDate = new Date( per.date )
-            if( typeof permanencesByMonth[ perDate.getMonth() ] === 'undefined' ){
-                permanencesByMonth[ perDate.getMonth() ] = {}
-                permanencesByMonth[ perDate.getMonth() ].month = perDate
-                permanencesByMonth[ perDate.getMonth() ].perm = []
+            if( permOfTheDay ){
+                // Si un permanence correspond a la date on l'affiche
+                permToDisplay.push( <Permanence per={permOfTheDay} key={currentDay.format()}/> )
+            } else {
+                // Si c'est une date de permanences prévut on affiche un permanence sans ouvreur
+                let recPerm = find( recurrentPerm, [ 'day', currentDay.get('day') ] )
+                if( recPerm ){
+                    currentDay.set('hour', recPerm.hour)
+                    currentDay.set('minute', recPerm.minute)
+                    permToDisplay.push( <Permanence per={{date: currentDay.format(), openers: [] }} key={currentDay.format()}/> )
+                }
             }
-            permanencesByMonth[ perDate.getMonth() ].perm.push( per )
-        })
-
+            currentDay.add( 1, 'days' )
+        }
         return (
-            <Fragment>
+            <Swipeable
+                onSwipedLeft={ () => this.setCurrentMonth( nextMonth ) }
+                onSwipedRight={ () => this.setCurrentMonth( prevMonth ) }
+            >
+                <Typography component="h2" variant="h5" gutterBottom style={{marginTop:"2em"}}>
+                    { moment( currentMonth ).format('MMMM YYYY') }
+                </Typography>
+
                 {
                     loading  ?
-                        <CircularProgress style={{marginTop:"2em"}}/>
+                        <LinearProgress variant="query" style={{marginTop:"2em"}}/>
                         :
-                        permanencesByMonth.map( ( monthObjc ) => (
-                            <Fragment key={monthObjc.month.toLocaleString()}>
-
-                                <Swipeable
-                                    onSwipedLeft={ () => this.setCurrentMonth( nextMonth ) }
-                                    onSwipedRight={ () => this.setCurrentMonth( prevMonth ) }
-                                >
-                                    <Typography component="h2" variant="h5" gutterBottom style={{marginTop:"2em"}}>
-                                        { monthObjc.month.toLocaleString( 'fr-FR', { month: "long", year: "numeric"}) }
-                                    </Typography>
-
-                                    <Grid container spacing={24} alignItems="stretch">
-                                        {
-                                            monthObjc.perm.map(  per => ( <Permanence per={per} key={per['@id']}/>))
-                                        }
-                                    </Grid>
-                                </Swipeable>
-                                <Grid container spacing={24} alignItems="stretch">
-                                    <Grid item xs={6}>
-                                        <Button variant="contained" onClick={ () => this.setCurrentMonth( prevMonth )}>
-                                            Prev
-                                        </Button>
-                                    </Grid>
-                                    <Grid item xs={6} style={{textAlign: 'right'}}>
-                                        <Button variant="contained" onClick={ () => this.setCurrentMonth( nextMonth )}>
-                                            Next
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Fragment>
-                        ))
+                        <Grid container spacing={24} alignItems="stretch">
+                            { permToDisplay }
+                        </Grid>
                 }
-            </Fragment>
+
+                <Grid container spacing={24} alignItems="stretch">
+                    <Grid item xs={6}>
+                        <Button variant="contained" onClick={ () => this.setCurrentMonth( prevMonth )}>
+                            Prev
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6} style={{textAlign: 'right'}}>
+                        <Button variant="contained" onClick={ () => this.setCurrentMonth( nextMonth )}>
+                            Next
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Swipeable>
         )
     }
 }

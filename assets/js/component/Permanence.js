@@ -3,13 +3,12 @@ import Typography from '@material-ui/core/Typography';
 import {Avatar, Card, CardContent, Chip, Grid } from "@material-ui/core"
 import Gravatar from "react-gravatar"
 import Grow from '@material-ui/core/Grow';
+import * as moment from 'moment'
 
 class Permance extends React.Component {
 
     render() {
         const { per } = this.props
-
-        const toLocaleStringOptions = {weekday: "long", day: "numeric", hour: "2-digit", minute: "2-digit"};
 
         return (
             <Grow in>
@@ -17,7 +16,7 @@ class Permance extends React.Component {
                     <Card>
                         <CardContent>
                             <Typography gutterBottom>
-                                {new Date(per.date).toLocaleString('fr-FR', toLocaleStringOptions)}
+                                {moment(per.date).format('dddd D à HH:mm')}
                             </Typography>
                             {
                                 per.canceled ?
