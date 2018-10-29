@@ -7,6 +7,7 @@ import { superagent, apiRoot, handelError } from '../utils/superagentWrapper'
 import * as moment from 'moment'
 import Swipeable from 'react-swipeable'
 import { find } from 'lodash'
+import Icon from '@material-ui/core/Icon';
 
 class PermancesList extends React.Component {
 
@@ -115,12 +116,14 @@ class PermancesList extends React.Component {
                 <Grid container spacing={24} alignItems="stretch">
                     <Grid item xs={6}>
                         <Button variant="contained" onClick={ () => this.setCurrentMonth( prevMonth )}>
-                            Prev
+                            <Icon>chevron_left</Icon>
+                            { moment( `${currentMonth}-01`).subtract( 1, 'months' ).format( 'MMM YY' ) }
                         </Button>
                     </Grid>
                     <Grid item xs={6} style={{textAlign: 'right'}}>
                         <Button variant="contained" onClick={ () => this.setCurrentMonth( nextMonth )}>
-                            Next
+                            { moment( `${currentMonth}-01`).add( 1, 'months' ).format( 'MMM YY' ) }
+                            <Icon>chevron_right</Icon>
                         </Button>
                     </Grid>
                 </Grid>
