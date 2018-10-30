@@ -7,7 +7,8 @@ import { superagent, apiRoot, handelError } from '../utils/superagentWrapper'
 import * as moment from 'moment'
 import Swipeable from 'react-swipeable'
 import { find } from 'lodash'
-import Icon from '@material-ui/core/Icon';
+import ChevronLeft from '@material-ui/icons/ChevronLeft'
+import ChevronRight from '@material-ui/icons/ChevronRight'
 
 class PermancesList extends React.Component {
 
@@ -28,7 +29,12 @@ class PermancesList extends React.Component {
     }
 
     componentDidMount() {
+        this.mounted = true;
         this.getPermanences()
+    }
+
+    componentWillUnmount(){
+        this.mounted = false;
     }
 
     componentDidUpdate( prevProps, prevState ){
@@ -52,10 +58,13 @@ class PermancesList extends React.Component {
             .then( ( response ) => {
                 const body = handelError( response )
                 if( body ){
-                    this.setState({
-                        permanences: body['hydra:member'],
-                        loading: false
-                    })
+                    if(this.mounted) {
+
+                        this.setState({
+                            permanences: body['hydra:member'],
+                            loading: false
+                        })
+                    }
                 }
             })
     }
@@ -116,14 +125,14 @@ class PermancesList extends React.Component {
                 <Grid container spacing={24} alignItems="stretch">
                     <Grid item xs={6}>
                         <Button variant="contained" onClick={ () => this.setCurrentMonth( prevMonth )}>
-                            <Icon>chevron_left</Icon>
+                            <ChevronLeft />
                             { moment( `${currentMonth}-01`).subtract( 1, 'months' ).format( 'MMM YY' ) }
                         </Button>
                     </Grid>
                     <Grid item xs={6} style={{textAlign: 'right'}}>
                         <Button variant="contained" onClick={ () => this.setCurrentMonth( nextMonth )}>
                             { moment( `${currentMonth}-01`).add( 1, 'months' ).format( 'MMM YY' ) }
-                            <Icon>chevron_right</Icon>
+                            <ChevronRight />
                         </Button>
                     </Grid>
                 </Grid>

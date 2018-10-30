@@ -6,19 +6,21 @@
  */
 
 // any CSS you require will output into a single css file (app.css in this case)
-import {CircularProgress} from "@material-ui/core"
+require('../css/app.css')
 
-require('../css/app.css');
-
-import React from "react"
-import ReactDOM from 'react-dom';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import {lightGreen} from '@material-ui/core/colors';
-import Composter from './component/Composter'
-import PermancesList from './component/PermancesList'
+import React, {Fragment} from "react"
+import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import {lightGreen} from '@material-ui/core/colors'
+import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core'
+import HelpPage from './component/HelpPage'
+import ComposterPermanencesListe from './component/ComposterPermanencesListe'
 import { AppContext } from "./app-context"
 import { superagent, apiRoot, handelError } from './utils/superagentWrapper'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import Help from '@material-ui/icons/Help'
 
 const defaultTheme = createMuiTheme();
 
@@ -85,13 +87,30 @@ class App extends React.Component {
         return (
             <AppContext.Provider value={this.state}>
                 <MuiThemeProvider theme={theme}>
-                    <div style={{maxWidth: "75em", margin:"2em auto", padding:"0 7%", boxSizing:"content-box"}}>
-                        <CssBaseline />
-                        <Composter />
-                        { this.state.selectedComposter &&
-                            <PermancesList />
-                        }
-                    </div>
+                    <CssBaseline />
+                    <Router>
+                        <Fragment>
+                            <AppBar position="static">
+                                <Toolbar>
+                                    <Typography variant="h6" color="inherit" style={{flexGrow:"1", textAlign: "left"}} component={Link} to="/">
+                                        Compost‘heures
+                                    </Typography>
+                                    <IconButton color="inherit" component={Link} to="/aide/">
+                                        <Help color="inherit"/>
+                                    </IconButton>
+                                    <Tooltip title="Bientôt ;-)">
+                                        <IconButton color="inherit">
+                                            <AccountCircle color="inherit"/>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Toolbar>
+                            </AppBar>
+                            <div style={{maxWidth: "75em", margin:"2em auto", padding:"0 7%", boxSizing:"content-box"}}>
+                                <Route path="/" exact component={ComposterPermanencesListe} />
+                                <Route path="/aide/" component={HelpPage} />
+                            </div>
+                        </Fragment>
+                    </Router>
                 </MuiThemeProvider>
             </AppContext.Provider>
         );
