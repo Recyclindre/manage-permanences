@@ -16,7 +16,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import {lightGreen} from '@material-ui/core/colors'
 import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core'
 import HelpPage from './component/HelpPage'
-import ComposterPermanencesListe from './component/ComposterPermanencesListe'
+import Composter from './component/Composter'
 import { AppContext } from "./app-context"
 import { superagent, apiRoot, handelError } from './utils/superagentWrapper'
 import AccountCircle from '@material-ui/icons/AccountCircle'
@@ -106,7 +106,7 @@ class App extends React.Component {
                                 </Toolbar>
                             </AppBar>
                             <div style={{maxWidth: "75em", margin:"2em auto", padding:"0 7%", boxSizing:"content-box"}}>
-                                <Route path="/" exact component={ComposterPermanencesListe} />
+                                <Route path="/" exact component={Composter} />
                                 <Route path="/aide/" component={HelpPage} />
                             </div>
                         </Fragment>

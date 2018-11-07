@@ -1,24 +1,61 @@
 import React, {Fragment} from "react"
-import { Typography, CircularProgress } from '@material-ui/core';
+import PermancesList from './PermancesList';
 import { AppContext } from '../app-context';
+import {Tabs, Tab, Typography, CircularProgress} from "@material-ui/core"
+import Markdown from '../utils/Markdown'
 
-class Composter extends React.Component {
+class ComposterPermanencesListe extends React.Component {
+
+    constructor() {
+        super();
+
+        this.state = {
+            openedTab: 0,
+        };
+    }
+
+    handleChange(event, openedTab) {
+        this.setState({ openedTab });
+    };
 
     render() {
+        let { openedTab } = this.state;
         let appContext = this.context;
 
         return (
-            appContext.selectedComposter ?
-                <Fragment>
-                    <Typography component="h1" variant="h3" gutterBottom>{appContext.selectedComposter.name}</Typography>
-                    <Typography component="p" gutterBottom>{appContext.selectedComposter.description}</Typography>
-                </Fragment>
-                :
-                <CircularProgress />
+            <Fragment>
+                { appContext.selectedComposter ?
+                    <Fragment>
 
-            )
+                        <Typography component="h1" variant="h3" gutterBottom>{appContext.selectedComposter.name}</Typography>
+
+                        <Tabs
+                            value={openedTab}
+                            onChange={ ( event, openedTab ) => this.handleChange( event, openedTab )}
+                            indicatorColor="primary">
+                            <Tab label="Permanences" />
+                            <Tab label="Informations" />
+                        </Tabs>
+
+                        { openedTab === 0 &&
+                            <Fragment>
+                                <Typography component="p" gutterBottom>{appContext.selectedComposter.description}</Typography>
+
+                                <PermancesList />
+                            </Fragment>
+
+                        }
+                        { openedTab === 1 && <Markdown source={appContext.selectedComposter.description} />}
+
+                    </Fragment>
+                    :
+                    <CircularProgress/>
+                }
+            </Fragment>
+
+        )
     }
 }
-Composter.contextType = AppContext;
+ComposterPermanencesListe.contextType = AppContext;
 
-export default Composter
+export default ComposterPermanencesListe

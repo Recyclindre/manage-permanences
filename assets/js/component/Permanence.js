@@ -1,4 +1,4 @@
-import React, {Fragment} from "react"
+import React from "react"
 import Typography from '@material-ui/core/Typography';
 import {Avatar, Card, CardContent, Chip, Grid } from "@material-ui/core"
 import { withStyles } from '@material-ui/core/styles'
@@ -23,7 +23,7 @@ const styles = theme => ({
     }
 })
 
-class Permance extends React.Component {
+class Permance extends React.PureComponent {
 
     render() {
         const { per, classes } = this.props
