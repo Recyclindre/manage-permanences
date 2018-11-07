@@ -1,13 +1,13 @@
 ###> symfony/framework-bundle ###
-/.env
-/public/bundles/
-/var/
-/vendor/
+/backend/.env
+/backend/public/bundles/
+/backend/var/
+/backend/vendor/
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-pack ###
-/node_modules/
-/public/build/
+/backend/node_modules/
+/backend/public/build/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-pack ###
