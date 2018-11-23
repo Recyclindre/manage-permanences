@@ -1,14 +1,14 @@
-import React, {Fragment} from "react"
+import React from "react"
 import Typography from '@material-ui/core/Typography';
 import {Grid, LinearProgress, Button } from "@material-ui/core"
 import Permanence from "./Permanence"
 import {AppContext} from "../app-context"
-import { superagent, apiRoot, handelError } from '../utils/superagentWrapper'
 import * as moment from 'moment'
 import Swipeable from 'react-swipeable'
 import { find } from 'lodash'
 import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ChevronRight from '@material-ui/icons/ChevronRight'
+import Api from '../utils/Api'
 
 class PermancesList extends React.Component {
 
@@ -45,28 +45,18 @@ class PermancesList extends React.Component {
         }
     }
 
-    getPermanences(){
+    async getPermanences(){
         const { selectedComposter } = this.context
         const { currentMonth } = this.state
 
-        superagent
-            .get(`${apiRoot}/permanences`)
-            .query( { "order[date]" : "ASC" } )
-            .query( { composter : selectedComposter.id } )
-            .query( {"date[after]" : `${currentMonth}-01`})
-            .query( {"date[before]" : `${currentMonth}-31`})
-            .then( ( response ) => {
-                const body = handelError( response )
-                if( body ){
-                    if(this.mounted) {
+        const permanences = await Api.getPermanences( selectedComposter.id, currentMonth)
 
-                        this.setState({
-                            permanences: body['hydra:member'],
-                            loading: false
-                        })
-                    }
-                }
+        if( permanences.status === 200 && this.mounted) {
+            this.setState({
+              permanences: permanences.data,
+              loading: false
             })
+        }
     }
 
 

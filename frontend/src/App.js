@@ -7,7 +7,6 @@
 import './App.css';
 
 import React, {Fragment} from "react"
-import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -16,9 +15,9 @@ import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/c
 import HelpPage from './component/HelpPage'
 import Composter from './component/Composter'
 import { AppContext } from "./app-context"
-import { superagent, apiRoot, handelError } from './utils/superagentWrapper'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import Help from '@material-ui/icons/Help'
+import Api from "./utils/Api"
 
 const defaultTheme = createMuiTheme();
 
@@ -57,23 +56,19 @@ class App extends React.Component {
         };
     }
 
-    setContextComposter( composterId ){
+    async setContextComposter( composterId ){
 
         this.setState({
             selectedComposter: null
         })
 
-        superagent
-            .get( `${apiRoot}/composters/${composterId}`)
-            .then( ( response ) => {
-
-                const body = handelError( response )
-                if( body ){
-                    this.setState({
-                        selectedComposter: body
-                    })
-                }
+        const selectedComposter = await Api.getComposter( composterId )
+        if( selectedComposter.status === 200 ){
+            this.setState({
+                selectedComposter: selectedComposter.data
             })
+
+        }
     }
 
     componentDidMount(){
