@@ -19,6 +19,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import Help from '@material-ui/icons/Help'
 import Api from "./utils/Api"
 
+import { ReactComponent as Logo } from './svg/logo.svg';
+
+
 const defaultTheme = createMuiTheme();
 
 const theme = createMuiTheme({
@@ -85,8 +88,9 @@ class App extends React.Component {
                         <Fragment>
                             <AppBar position="static">
                                 <Toolbar>
-                                    <Typography variant="h6" color="inherit" style={{flexGrow:"1", textAlign: "left"}} component={Link} to="/">
-                                        Compost‘heures
+                                    <Typography variant="h6" color="inherit" style={{flexGrow:"1", textAlign: "left", textDecoration:'none'}} component={Link} to="/">
+                                        <Logo style={{width:50,height:50,verticalAlign:'middle', marginRight:'.5em'}}/>
+                                        <span>Compost'heur</span>
                                     </Typography>
                                     <IconButton color="inherit" component={Link} to="/aide/">
                                         <Help color="inherit"/>
