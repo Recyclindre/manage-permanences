@@ -61,7 +61,7 @@ class Permance extends React.PureComponent {
                                         per.openers.map(user => (
 
                                             <Chip
-                                                key={user['@id']}
+                                                key={moment(per.date).format("YYYY-mm-DD") + '-opener-' + user.id}
                                                 avatar={<Avatar component={Gravatar} email={user.email}/>}
                                                 label={user.username}
                                                 color="primary"
