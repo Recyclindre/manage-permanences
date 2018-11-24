@@ -9,11 +9,11 @@ easy_admin:
             form:
                 fields:
                     - name
+                    - short_description
                     - description
                     - address
                     - lat
                     - lng
-                    - { property: 'permanences', type_options: { by_reference: false } }
         Permanence:
             class: App\Entity\Permanence
             controller: App\Controller\PermanenceComtroller

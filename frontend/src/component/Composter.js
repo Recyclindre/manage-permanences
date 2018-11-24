@@ -32,20 +32,33 @@ class ComposterPermanencesListe extends React.Component {
                         <Tabs
                             value={openedTab}
                             onChange={ ( event, openedTab ) => this.handleChange( event, openedTab )}
-                            indicatorColor="primary">
+                            indicatorColor="primary"
+                            style={{marginBottom:'2em'}}
+                        >
                             <Tab label="Permanences" />
                             <Tab label="Informations" />
                         </Tabs>
 
                         { openedTab === 0 &&
                             <Fragment>
-                                <Typography component="p" gutterBottom>{appContext.selectedComposter.description}</Typography>
+                                <Markdown source={appContext.selectedComposter.short_description} />
 
                                 <PermancesList />
                             </Fragment>
 
                         }
-                        { openedTab === 1 && <Markdown source={appContext.selectedComposter.description} />}
+                        { openedTab === 1 &&
+                            <Fragment>
+                                { appContext.selectedComposter.address &&
+                                    <Fragment>
+                                        <Typography component="h2" variant="h6">Adresse du composter</Typography>
+                                        <Markdown source={appContext.selectedComposter.address} />
+                                    </Fragment>
+                                }
+                                <Typography component="h2" variant="h6">Informations</Typography>
+                                <Markdown source={appContext.selectedComposter.description} />
+                            </Fragment>
+                        }
 
                     </Fragment>
                     :

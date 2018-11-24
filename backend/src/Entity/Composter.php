@@ -5,6 +5,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * A book.
@@ -12,7 +14,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ORM\Entity
  * @ApiResource(
  *     collectionOperations={"get"},
- *     itemOperations={"get"}
+ *     itemOperations={"get"},
+ *     normalizationContext={"groups"={"composter"}}
  * )
  */
 class Composter
@@ -23,6 +26,7 @@ class Composter
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"composter"})
      */
     private $id;
 
@@ -31,13 +35,23 @@ class Composter
      * @var string The name of the composter
      *
      * @ORM\Column
+     * @Groups({"composter"})
      */
     public $name;
+
+    /**
+     * @var string The short description of the composter to be shown on the composter page
+     *
+     * @ORM\Column(type="text")
+     * @Groups({"composter"})
+     */
+    public $short_description;
 
     /**
      * @var string The description of the composter to be shown on the composter page
      *
      * @ORM\Column(type="text")
+     * @Groups({"composter"})
      */
     public $description;
 
@@ -45,6 +59,7 @@ class Composter
      * @var string The address of the composter to be shown on the composter page
      *
      * @ORM\Column(type="text")
+     * @Groups({"composter"})
      */
     public $address;
 
@@ -52,6 +67,7 @@ class Composter
      * @var float The latitude of the composter
      *
      * @ORM\Column(type="float")
+     * @Groups({"composter"})
      */
     public $lat;
 
@@ -59,6 +75,7 @@ class Composter
      * @var float The longitude of the composter
      *
      * @ORM\Column(type="float")
+     * @Groups({"composter"})
      */
     public $lng;
 
@@ -170,6 +187,18 @@ class Composter
                 $permanence->setComposter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getShortDescription(): ?string
+    {
+        return $this->short_description;
+    }
+
+    public function setShortDescription(string $short_description): self
+    {
+        $this->short_description = $short_description;
 
         return $this;
     }
