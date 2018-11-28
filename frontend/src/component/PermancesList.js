@@ -4,6 +4,7 @@ import {Grid, LinearProgress, Button } from "@material-ui/core"
 import Permanence from "./Permanence"
 import {AppContext} from "../app-context"
 import * as moment from 'moment'
+import 'moment/locale/fr'
 import Swipeable from 'react-swipeable'
 import { find } from 'lodash'
 import ChevronLeft from '@material-ui/icons/ChevronLeft'
