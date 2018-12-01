@@ -44,7 +44,6 @@ class Permanence
      */
     private $id;
 
-
     /**
      * @var \DateTime Permanence date
      *
@@ -75,6 +74,22 @@ class Permanence
      * @ORM\ManyToOne(targetEntity="Composter", inversedBy="permanences")
      */
     public $composter;
+
+    /**
+     * @var string Event title
+     *
+     * @ORM\Column(type="string", options={"default" : null})
+     * @Groups({"permanence"})
+     */
+    public $eventTitle;
+
+    /**
+     * @var string Event Message
+     *
+     * @ORM\Column(type="text", options={"default" : null})
+     * @Groups({"permanence"})
+     */
+    public $eventMessage;
 
     public function __construct() {
         $this->openers = new ArrayCollection();
@@ -149,6 +164,30 @@ class Permanence
     public function setComposter(?Composter $composter): self
     {
         $this->composter = $composter;
+
+        return $this;
+    }
+
+    public function getEventTitle(): ?string
+    {
+        return $this->eventTitle;
+    }
+
+    public function setEventTitle(string $eventTitle): self
+    {
+        $this->eventTitle = $eventTitle;
+
+        return $this;
+    }
+
+    public function getEventMessage(): ?string
+    {
+        return $this->eventMessage;
+    }
+
+    public function setEventMessage(string $eventMessage): self
+    {
+        $this->eventMessage = $eventMessage;
 
         return $this;
     }

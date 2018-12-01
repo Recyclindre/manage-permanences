@@ -13,8 +13,8 @@ import Api from '../utils/Api'
 
 class PermancesList extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         const today = moment().format('YYYY-MM')
 

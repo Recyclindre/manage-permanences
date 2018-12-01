@@ -21,10 +21,14 @@ easy_admin:
                 sort: ['date', 'DESC']
             form:
                 fields:
+                    - { type: 'section', label: 'Infos' }
                     - { property: 'date', type: 'datetime' }
                     - { property: 'openers', type_options: { by_reference: false} }
                     - canceled
                     - composter
+                    - { type: 'section', label: 'Evénement' }
+                    - { property: eventTitle, type_options: { required: false } }
+                    - { property: eventMessage, type_options: { required: false } }
         User:
             class: App\Entity\User
             controller: App\Controller\UserController

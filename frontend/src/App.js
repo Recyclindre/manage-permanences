@@ -10,7 +10,7 @@ import React, {Fragment} from "react"
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import {lightGreen} from '@material-ui/core/colors'
+import {lightGreen, blue} from '@material-ui/core/colors'
 import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core'
 import HelpPage from './component/HelpPage'
 import Composter from './component/Composter'
@@ -30,6 +30,7 @@ const theme = createMuiTheme({
     },
     palette: {
         primary: lightGreen,
+        blue: blue
     },
     overrides: {
         MuiChip: {
@@ -40,7 +41,6 @@ const theme = createMuiTheme({
         },
         MuiPaper :{
             root: {
-                border: `2px solid ${lightGreen['500']}`,
                 textAlign: "center",
                 height: "100%"
             }
