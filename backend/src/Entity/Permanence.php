@@ -78,7 +78,7 @@ class Permanence
     /**
      * @var string Event title
      *
-     * @ORM\Column(type="string", options={"default" : null})
+     * @ORM\Column(type="string", nullable=true, options={"default" : null})
      * @Groups({"permanence"})
      */
     public $eventTitle;
@@ -86,10 +86,31 @@ class Permanence
     /**
      * @var string Event Message
      *
-     * @ORM\Column(type="text", options={"default" : null})
+     * @ORM\Column(type="text", nullable=true, options={"default" : null})
      * @Groups({"permanence"})
      */
     public $eventMessage;
+
+    /**
+     * @var int Number of persons who show up
+     *
+     * @ORM\Column(type="smallint", nullable=true, options={"default" : null})
+     */
+    public $nbUsers;
+
+    /**
+     * @var float Number of buckets added to the composter
+     *
+     * @ORM\Column(type="float", nullable=true, options={"default" : null})
+     */
+    public $nbBuckets;
+
+    /**
+     * @var float composter temperature
+     *
+     * @ORM\Column(type="float", nullable=true, options={"default" : null})
+     */
+    public $temperature;
 
     public function __construct() {
         $this->openers = new ArrayCollection();
@@ -167,13 +188,50 @@ class Permanence
 
         return $this;
     }
+    
+
+    public function getNbUsers()
+    {
+        return $this->nbUsers;
+    }
+
+    public function setNbUsers($nbUsers): self
+    {
+        $this->nbUsers = $nbUsers;
+
+        return $this;
+    }
+
+    public function getNbBuckets(): ?float
+    {
+        return $this->nbBuckets;
+    }
+
+    public function setNbBuckets(float $nbBuckets): self
+    {
+        $this->nbBuckets = $nbBuckets;
+
+        return $this;
+    }
+
+    public function getTemperature(): ?float
+    {
+        return $this->temperature;
+    }
+
+    public function setTemperature(float $temperature): self
+    {
+        $this->temperature = $temperature;
+
+        return $this;
+    }
 
     public function getEventTitle(): ?string
     {
         return $this->eventTitle;
     }
 
-    public function setEventTitle(string $eventTitle): self
+    public function setEventTitle(?string $eventTitle): self
     {
         $this->eventTitle = $eventTitle;
 
@@ -185,7 +243,7 @@ class Permanence
         return $this->eventMessage;
     }
 
-    public function setEventMessage(string $eventMessage): self
+    public function setEventMessage(?string $eventMessage): self
     {
         $this->eventMessage = $eventMessage;
 

@@ -19,16 +19,26 @@ easy_admin:
             controller: App\Controller\PermanenceComtroller
             list:
                 sort: ['date', 'DESC']
+                fields:
+                    - id
+                    - date
+                    - { property: 'openers', label: 'Ouvreur(s)' }
+                    - { property: eventTitle, label: 'Titre de l‘événement' }
+                    - { property: 'canceled', label: 'Annulé'}
             form:
                 fields:
                     - { type: 'section', label: 'Infos' }
                     - { property: 'date', type: 'datetime' }
-                    - { property: 'openers', type_options: { by_reference: false} }
-                    - canceled
-                    - composter
+                    - { property: 'openers', label: 'Ouvreur(s)', type_options: { by_reference: false} }
+                    - { property: 'canceled', label: 'Annulé'}
+                    - { property: 'composter', label: 'Composteur'}
+                    - { type: 'section', label: 'Stats' }
+                    - { property: nbUsers, label: 'Nombres de présents', type_options: { required: false } }
+                    - { property: nbBuckets, label: 'Nombres de sots ajouté', type_options: { required: false } }
+                    - { property: temperature, label: 'Température du composte', type_options: { required: false } }
                     - { type: 'section', label: 'Evénement' }
-                    - { property: eventTitle, type_options: { required: false } }
-                    - { property: eventMessage, type_options: { required: false } }
+                    - { property: eventTitle, label: 'Titre de l‘événement', type_options: { required: false } }
+                    - { property: eventMessage, label: 'Description',type_options: { required: false } }
         User:
             class: App\Entity\User
             controller: App\Controller\UserController
