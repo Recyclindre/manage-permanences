@@ -34,8 +34,8 @@ easy_admin:
                     - { property: 'composter', label: 'Composteur'}
                     - { type: 'section', label: 'Stats' }
                     - { property: nbUsers, label: 'Nombres de présents', type_options: { required: false } }
-                    - { property: nbBuckets, label: 'Nombres de sots ajouté', type_options: { required: false } }
-                    - { property: temperature, label: 'Température du composte', type_options: { required: false } }
+                    - { property: nbBuckets, label: 'Nombres de seaux ajouté', type_options: { required: false } }
+                    - { property: temperature, label: 'Température du compost', type_options: { required: false } }
                     - { type: 'section', label: 'Evénement' }
                     - { property: eventTitle, label: 'Titre de l‘événement', type_options: { required: false } }
                     - { property: eventMessage, label: 'Description',type_options: { required: false } }
