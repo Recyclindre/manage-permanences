@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * A Permanence
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PermanenceRepository")
  * @ApiResource(
  *     collectionOperations={"get"},
  *     itemOperations={"get"},
@@ -111,6 +111,15 @@ class Permanence
      * @ORM\Column(type="float", nullable=true, options={"default" : null})
      */
     public $temperature;
+
+
+    /**
+     * @var bool has users been notify
+     *
+     * @ORM\Column(type="boolean", options={"default" : false})
+     */
+    public $hasUsersBeenNotify;
+
 
     public function __construct() {
         $this->openers = new ArrayCollection();
@@ -246,6 +255,18 @@ class Permanence
     public function setEventMessage(?string $eventMessage): self
     {
         $this->eventMessage = $eventMessage;
+
+        return $this;
+    }
+
+    public function getHasUsersBeenNotify(): ?bool
+    {
+        return $this->hasUsersBeenNotify;
+    }
+
+    public function setHasUsersBeenNotify(bool $hasUsersBeenNotify): self
+    {
+        $this->hasUsersBeenNotify = $hasUsersBeenNotify;
 
         return $this;
     }

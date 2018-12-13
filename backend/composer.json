@@ -8,6 +8,7 @@
         "api-platform/api-pack": "^1.1",
         "easycorp/easyadmin-bundle": "^1.17",
         "friendsofsymfony/user-bundle": "^2.1",
+        "mailjet/mailjet-apiv3-php": "^1.4",
         "symfony/console": "*",
         "symfony/dotenv": "*",
         "symfony/flex": "^1.1",
