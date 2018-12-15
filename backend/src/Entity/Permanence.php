@@ -95,6 +95,7 @@ class Permanence
      * @var int Number of persons who show up
      *
      * @ORM\Column(type="smallint", nullable=true, options={"default" : null})
+     * @Groups({"permanence"})
      */
     public $nbUsers;
 
@@ -102,6 +103,7 @@ class Permanence
      * @var float Number of buckets added to the composter
      *
      * @ORM\Column(type="float", nullable=true, options={"default" : null})
+     * @Groups({"permanence"})
      */
     public $nbBuckets;
 
@@ -109,6 +111,7 @@ class Permanence
      * @var float composter temperature
      *
      * @ORM\Column(type="float", nullable=true, options={"default" : null})
+     * @Groups({"permanence"})
      */
     public $temperature;
 

@@ -1,13 +1,14 @@
 import React, {Fragment} from "react"
 import PermancesList from './PermancesList';
 import { AppContext } from '../app-context';
-import {Tabs, Tab, Typography, CircularProgress} from "@material-ui/core"
+import ComposterStats from './ComposterStats';
+import {Tabs, Tab, Typography, LinearProgress} from "@material-ui/core"
 import Markdown from '../utils/Markdown'
 
 class ComposterPermanencesListe extends React.Component {
 
-    constructor() {
-        super();
+    constructor( props ) {
+        super( props );
 
         this.state = {
             openedTab: 0,
@@ -37,6 +38,7 @@ class ComposterPermanencesListe extends React.Component {
                         >
                             <Tab label="Permanences" />
                             <Tab label="Informations" />
+                            <Tab label="Stats" />
                         </Tabs>
 
                         { openedTab === 0 &&
@@ -59,10 +61,13 @@ class ComposterPermanencesListe extends React.Component {
                                 <Markdown source={appContext.selectedComposter.description} />
                             </Fragment>
                         }
+                        { openedTab === 2 &&
+                            <ComposterStats />
+                        }
 
                     </Fragment>
                     :
-                    <CircularProgress/>
+                    <LinearProgress/>
                 }
             </Fragment>
 
