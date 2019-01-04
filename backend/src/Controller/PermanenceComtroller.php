@@ -29,6 +29,8 @@ class PermanenceComtroller extends BaseAdminController
 
         $permanence->setComposter( $composter );
 
+        $permanence->setHasUsersBeenNotify( false );
+
         return $permanence;
     }
 }
