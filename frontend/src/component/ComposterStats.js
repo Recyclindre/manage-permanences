@@ -27,7 +27,7 @@ class ComposterStats extends Component{
       datasets: [
         {
           label: 'Nombre d‘utilisateurs',
-          fill: true,
+          fill: false,
           lineTension: 0.1,
           backgroundColor: theme.palette.primary.light,
           borderColor: theme.palette.primary.main,
@@ -48,7 +48,7 @@ class ComposterStats extends Component{
         },
         {
           label: 'Nombre de sceaux',
-          fill: true,
+          fill: false,
           lineTension: 0.1,
           backgroundColor: theme.palette.secondary.light,
           borderColor: theme.palette.secondary.main,
@@ -124,7 +124,7 @@ class ComposterStats extends Component{
           <LinearProgress />
         }
         { data &&
-          <Line data={data} />
+          <Line data={data} options={{scales: {yAxes: [{ticks: {beginAtZero:true}}]}}}/>
         }
       </div>
     );
