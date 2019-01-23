@@ -22,7 +22,8 @@ const Api = {
     "order[date]" : "ASC",
     composter: selectedComposter,
     "date[after]": moment().subtract( 1, 'years').format(),
-    "date[before]": moment().format()
+    "date[before]": moment().format(),
+    "nbUsers[exists]": true
   })
 }
 
