@@ -27,7 +27,11 @@ import Api from './utils/Api'
 
 import { ReactComponent as Logo } from './svg/logo.svg'
 
-const defaultTheme = createMuiTheme()
+const defaultTheme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  }
+})
 
 const theme = createMuiTheme({
   typography: {
