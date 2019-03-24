@@ -43,12 +43,14 @@ const PermancesList = () => {
   const [permanences, setPermanences] = useState([])
   const { selectedComposter } = useContext(AppContext)
 
+  let isMount = true
+
   const fetchData = async () => {
     setLoading(true)
 
     const result = await Api.getPermanences(selectedComposter.id, currentMonth)
 
-    if (result.status === 200) {
+    if (result.status === 200 && isMount) {
       setPermanences(result.data)
       setLoading(false)
     }
@@ -57,6 +59,10 @@ const PermancesList = () => {
   useEffect(
     () => {
       fetchData()
+
+      return () => {
+        isMount = false
+      }
     },
     [currentMonth]
   )
