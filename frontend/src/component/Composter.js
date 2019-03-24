@@ -37,6 +37,7 @@ class ComposterPermanencesListe extends React.Component {
               }
               indicatorColor="primary"
               style={{ marginBottom: '2em' }}
+              variant="fullWidth"
             >
               <Tab label="Permanences" />
               <Tab label="Informations" />
